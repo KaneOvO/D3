@@ -25,23 +25,19 @@ class Base extends Phaser.Scene {
         this.text =  this.add.text(16, 16, 'Number of shots: 0');
         this.shelltype1 = this.add.image(this.w * 0.1 , this.h * 0.87, 'shell1').setDepth(2).setScale(3);
         this.shelltype2 = this.add.image(this.w * 0.1 , this.h * 0.87, 'shell2').setDepth(2).setScale(0.15).setVisible(false);;
-        
-        
+
 
         this.tureentBody = this.add.rectangle(this.w * 0.1 , this.h * 0.87, 150, 250, 0xffffff);
-        // this.tureentBody2 = this.add.circle(this.w * 0.1, this.h * 0.68, 75, 0xffffff);
-        // this.tureentHead = this.add.rectangle(this.w * 0.1 , this.h * 0.53, 150, 150, 0xffffff);
-        this.tureentHead1 = this.add.circle(0,  0, 75, 0xffffff);//this.w * 0.1, this.h * 0.68
-        this.tureentHead2 = this.add.rectangle(105 , 0, 50, 25, 0xffffff);//this.w * 0.16 , this.h * 0.68
+        this.tureentHead1 = this.add.circle(0,  0, 75, 0xffffff);
+        this.tureentHead2 = this.add.rectangle(105 , 0, 50, 25, 0xffffff);
 
         this.turrent = this.add.container(this.w * 0.1, this.h * 0.68);
         this.turrent.add(this.tureentHead1);
         this.turrent.add(this.tureentHead2);
 
-        //this.turrent.setRotation(Phaser.Math.DegToRad(15));
-        let targetgroup = this.creatTarget();
-        targetgroup.create(this.w * 0.8, this.h * 0.3).setScale(1.5).body.setAllowGravity(false);
-        
+        this.targetgroup = this.creatTarget();
+        this.shell1group = this.creatShell1();
+        this.shell2group = this.creatShell2();
 
         let angle = 0;
 
@@ -67,19 +63,22 @@ class Base extends Phaser.Scene {
         {
             if(shellType == 1)
             {
-                let shell1 = this.creatShell(shellType);
+                //let shell1 = this.creatShell(shellType);
+                let shell1 = this.shell1group.create(0, 0).setScale(0.7);
                 shell1.enableBody(true, this.turrent.x, this.turrent.y, true, true);
                 shell1.setGravity(0, -200);
-                this.physics.velocityFromRotation(angle, 700, shell1.body.velocity);
+                this.physics.velocityFromRotation(angle, 700, shell1.body.velocity);              
                 shootTime++;
                 this.text.setText('Number of shots: ' + shootTime);
             }
             else if(shellType == 2)
             {
-                let shell2 = this.creatShell(shellType);
+                //let shell2 = this.creatShell(shellType);
+                let shell2 = this.shell2group.create(0, 0).setScale(0.03);
                 shell2.enableBody(true, this.turrent.x, this.turrent.y, true, true);
                 shell2.setGravity(0, 500);
                 this.physics.velocityFromRotation(angle, 1000, shell2.body.velocity);
+                
                 shootTime++;
                 this.text.setText('Number of shots: ' + shootTime);
             }
@@ -104,10 +103,7 @@ class Base extends Phaser.Scene {
 
         });
 
-        this.physics.add.overlap(shell, targetgroup, collide, null, this);
-
-
-
+        this.startoverlap(this.shell1group, this.shell2group, this.targetgroup)
 
         this.onEnter();
 
@@ -124,15 +120,6 @@ class Base extends Phaser.Scene {
         });
     }
 
-    //add a funtion to creat a sprite and set it can be interactive
-    addsprite(x, y, name)
-    {
-        let temp = this.add.sprite(x, y, name); 
-        temp.setInteractive();
-
-        return temp;
-    }
-
     //add a functuon to make the scene can be shake
     shakeTween()
     {
@@ -146,23 +133,28 @@ class Base extends Phaser.Scene {
           });
     }
 
-    creatShell(shellType)
+    creatShell1()
     {
-        if(shellType == 1)
+        let shell1group = this.physics.add.group(
         {
-            let shell1 = this.physics.add.sprite(0, 0, 'shell1').setScale(0.7);
-            shell1.disableBody(true, true);
-    
-            return shell1
-        }
-        else if(shellType == 2)
+                defaultKey: 'shell1',
+                collideWorldBounds: false
+                
+        });
+
+        return shell1group
+    }
+
+    creatShell2()
+    {
+        let shell2group = this.physics.add.group(
         {
-            let shell2 = this.physics.add.sprite(0, 0, 'shell2').setScale(0.03);
-            shell2.disableBody(true, true);
+                defaultKey: 'shell2',
+                collideWorldBounds: false
+                
+        });
 
-            return shell2
-        }
-
+        return shell2group
     }
 
     creatTarget()
@@ -177,6 +169,18 @@ class Base extends Phaser.Scene {
         
 
         return targetgroup
+    }
+
+    overlap (shell1, target)
+    {
+        shell1.disableBody(true, true);
+        target.disableBody(true, true);
+    }
+
+    startoverlap(shell1group, shell2group, targetgroup)
+    {
+        this.physics.add.overlap(shell1group, targetgroup, this.overlap, null, this);
+        this.physics.add.overlap(shell2group, targetgroup, this.overlap, null, this); 
     }
 
     update()
