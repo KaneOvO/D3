@@ -8,6 +8,7 @@ class Base extends Phaser.Scene {
     {
         this.load.image('shell1', 'assets/snowball.png')
         this.load.image('shell2', 'assets/RainbowBall.png')
+        this.load.image('target', 'assets/target.png')
     }
 
     create() {
@@ -38,7 +39,9 @@ class Base extends Phaser.Scene {
         this.turrent.add(this.tureentHead2);
 
         //this.turrent.setRotation(Phaser.Math.DegToRad(15));
-
+        let targetgroup = this.creatTarget();
+        targetgroup.create(this.w * 0.8, this.h * 0.3).setScale(1.5).body.setAllowGravity(false);
+        
 
         let angle = 0;
 
@@ -101,6 +104,8 @@ class Base extends Phaser.Scene {
 
         });
 
+        this.physics.add.overlap(shell, targetgroup, collide, null, this);
+
 
 
 
@@ -158,6 +163,20 @@ class Base extends Phaser.Scene {
             return shell2
         }
 
+    }
+
+    creatTarget()
+    {
+        let targetgroup = this.physics.add.group(
+        {
+            defaultKey: 'target',
+            collideWorldBounds: true
+            
+        });
+
+        
+
+        return targetgroup
     }
 
     update()
