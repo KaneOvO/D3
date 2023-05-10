@@ -1,13 +1,5 @@
-// const game = new Phaser.Game({
-//     scale: {
-//         mode: Phaser.Scale.FIT,
-//         autoCenter: Phaser.Scale.CENTER_BOTH,
-//         width: 1920,
-//         height: 1080
-//     },
-//     scene: [level1],
-//     title: "Adventure Game",
-// });
+let shootTime = 0;
+let shellType = 1;
 
 let config = {
     type: Phaser.WEBGL,
@@ -23,11 +15,11 @@ let config = {
             debug: true,
             gravity: {
                 x: 0,
-                y: 0
+                y: 200
             }
         }
     },
-    scene: [BaseScene]
+    scene: [Level1]
 };
 
 let game = new Phaser.Game(config);

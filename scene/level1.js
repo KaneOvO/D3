@@ -1,11 +1,12 @@
-class level1 extends BaseScene {
+class Level1 extends Base {
 
     constructor() {
-        super("level1");
+        super("Level1");
     }
 
-    create() 
+    onEnter() 
     {
+        
         
     }
 
@@ -13,5 +14,7 @@ class level1 extends BaseScene {
     {
 
     }
+
+    
 
 }
