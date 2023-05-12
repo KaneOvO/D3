@@ -54,7 +54,11 @@ class BaseSettlement extends Phaser.Scene{
         });
         
 
-        
+        this.input.on('pointerup', () =>
+        {
+            level++;
+            this.gotoScene('Level'+ level);
+        })
 
 
         this.onEnter();
@@ -63,6 +67,13 @@ class BaseSettlement extends Phaser.Scene{
     onEnter()
     {
         
+    }
+
+    gotoScene(key) {
+        this.cameras.main.fade(this.transitionDuration, 0, 0, 0);
+        this.time.delayedCall(this.transitionDuration, () => {
+            this.scene.start(key);
+        });
     }
 
     
