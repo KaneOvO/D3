@@ -23,6 +23,8 @@ class Base extends Phaser.Scene {
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
         shootTime = 0;
+        shellType = 1;
+
         this.text =  this.add.text(16, 16, 'Number of shots: 0');
         this.showtitle();
 

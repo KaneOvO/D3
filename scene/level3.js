@@ -27,16 +27,19 @@ class Level3 extends Base {
         }
         
 
-        this.targetgroup.create(this.w * 0.7, this.h * 0.95).setScale(1.5).body.setGravity(0, -200);
-        this.targetgroup.create(this.w * 0.9, this.h * 0.95).setScale(1.5).body.setGravity(0, -200);
+        this.targetgroup.create(this.w * 0.7, this.h * 0.95).setScale(1.5).setGravity(0, -200);
+        this.targetgroup.create(this.w * 0.9, this.h * 0.95).setScale(1.5).setGravity(0, -200);
 
-        let movetarget1 = this.targetgroup.create(this.w * 0.9, this.h * 0.2).setScale(1.5).body.setGravity(0, -200);
-        this.move(movetarget1, 0.8);
+        let movetarget1 = this.targetgroup.create(this.w * 0.9, this.h * 0.2).setScale(1.5).setGravity(0, -200);
+        this.move(movetarget1, this.w * 0.7);
+
+        let movetarget2 = this.targetgroup.create(this.w * 0.7, this.h * 0.8).setScale(1.5).setGravity(0, -200);
+        this.move(movetarget2, this.w * 0.5);
+
+        let movetarget3 = this.targetgroup.create(this.w * 0.45, this.h * 0.2).setScale(1.5).setGravity(0, -200);
+        this.move(movetarget3, this.w * 0.1);
 
 
-
-
-        
         
     }
 

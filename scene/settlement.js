@@ -58,7 +58,11 @@ class BaseSettlement extends Phaser.Scene{
         {
             this.input.enabled = false;
             level++;
-            this.gotoScene('Level'+ level);
+            if(level < 4)
+            {
+                this.gotoScene('Level'+ level);
+            }
+            
         })
 
 
