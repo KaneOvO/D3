@@ -196,7 +196,7 @@ class Base extends Phaser.Scene {
         this.title.setOrigin(0.5)
     }
 
-    finish(target_num, level)
+    finish(target_num)
     {
         if(target_num < 1)
         {

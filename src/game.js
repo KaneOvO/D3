@@ -20,7 +20,8 @@ let config = {
             }
         }
     },
-    scene: [Level1,Level1settlement,level2,Level2settlement,level3,Level3settlement] 
+    scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
+    //scene: [Level3settlement] 
 };
 
 let game = new Phaser.Game(config);

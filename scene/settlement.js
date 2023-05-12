@@ -15,6 +15,8 @@ class BaseSettlement extends Phaser.Scene{
         this.cameras.main.setBackgroundColor('#000');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
+        this.input.enabled = true;
+
         this.text = this.add.text(this.w * 0.5, this.h * 0.2, 'Congratulations!',
         {
             font: "200px Impact",
@@ -39,22 +41,22 @@ class BaseSettlement extends Phaser.Scene{
             {
                 font: "100px Arial",
                 color: "#ffffff",    
-        });
-        this.text4.setOrigin(0.5);
-        this.text4.alpha = 0;
+            });
+            this.text4.setOrigin(0.5);
+            this.text4.alpha = 0;
 
-        this.tweens.add({
-            targets: this.text4,
-            alpha:1,
-            duration: 1500,
-            ease: 'Linear',
-            yoyo: true,
-            repeat:-1,
-        });
-        
+            this.animation = this.tweens.add({
+                targets: this.text4,
+                alpha:1,
+                duration: 1500,
+                ease: 'Linear',
+                yoyo: true,
+                repeat:-1,
+            });
 
         this.input.on('pointerup', () =>
         {
+            this.input.enabled = false;
             level++;
             this.gotoScene('Level'+ level);
         })

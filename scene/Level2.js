@@ -17,7 +17,7 @@ class Level2 extends Base {
 
     update()
     {
-        this.finish(this.target_num, 1);
+        this.finish(this.target_num);
     }
 
     
