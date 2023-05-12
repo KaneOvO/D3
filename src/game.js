@@ -1,5 +1,6 @@
 let shootTime = 0;
 let shellType = 1;
+let level = 1;
 
 let config = {
     type: Phaser.WEBGL,
@@ -19,7 +20,7 @@ let config = {
             }
         }
     },
-    scene: [Level1]
+    scene: [Level1settlement] 
 };
 
 let game = new Phaser.Game(config);

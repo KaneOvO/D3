@@ -39,6 +39,8 @@ class Base extends Phaser.Scene {
         this.shell1group = this.creatShell1();
         this.shell2group = this.creatShell2();
 
+        this.target_num;
+
         let angle = 0;
 
         this.input.on('pointermove', (pointer) =>
@@ -175,6 +177,7 @@ class Base extends Phaser.Scene {
     {
         shell1.disableBody(true, true);
         target.disableBody(true, true);
+        this.target_num--;
     }
 
     startoverlap(shell1group, shell2group, targetgroup)
@@ -183,9 +186,28 @@ class Base extends Phaser.Scene {
         this.physics.add.overlap(shell2group, targetgroup, this.overlap, null, this); 
     }
 
+    showtitle()
+    {
+        this.title = this.add.text(this.w / 2, 30, 'Level' + level,
+        {
+            font: "28px Arial",
+            color: "#ffffff",    
+        });
+        this.title.setOrigin(0.5)
+    }
+
+    finish(target_num, level)
+    {
+        if(target_num < 1)
+        {
+            this.gotoScene('Level'+ level + 'settlement')
+        }
+    }
+
+
     update()
     {
-
+        
     }
 
 }
