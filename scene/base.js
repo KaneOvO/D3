@@ -204,6 +204,19 @@ class Base extends Phaser.Scene {
         }
     }
 
+    move(sprite1, movex)
+    {
+        this.tweens.add({
+            targets: sprite1,
+            x: movex,
+            ease: 'Linear',
+            duration: 3000,
+            yoyo: true,
+            repeat: -1
+          });
+    }
+    
+
 
     update()
     {
