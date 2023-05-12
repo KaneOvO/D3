@@ -46,7 +46,6 @@ class BaseSettlement extends Phaser.Scene{
         this.tweens.add({
             targets: this.text4,
             alpha:1,
-            delay: 4500,
             duration: 1500,
             ease: 'Linear',
             yoyo: true,
