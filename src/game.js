@@ -1,6 +1,7 @@
 let shootTime = 0;
 let shellType = 1;
 let level = 1;
+const tileSize = 57.5;
 
 let config = {
     type: Phaser.WEBGL,
@@ -20,8 +21,8 @@ let config = {
             }
         }
     },
-    scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
-    //scene: [Level3settlement] 
+    //scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
+    scene: [Level3] 
 };
 
 let game = new Phaser.Game(config);

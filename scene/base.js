@@ -9,6 +9,7 @@ class Base extends Phaser.Scene {
         this.load.image('shell1', 'assets/snowball.png')
         this.load.image('shell2', 'assets/RainbowBall.png')
         this.load.image('target', 'assets/target.png')
+        this.load.image('tile', 'assets/tile.png')
     }
 
     create() {
@@ -40,6 +41,7 @@ class Base extends Phaser.Scene {
         this.targetgroup = this.creatTarget();
         this.shell1group = this.creatShell1();
         this.shell2group = this.creatShell2();
+        this.bargroup = this.creatbarrier();
 
         this.target_num;
 
@@ -107,7 +109,7 @@ class Base extends Phaser.Scene {
 
         });
 
-        this.startoverlap(this.shell1group, this.shell2group, this.targetgroup)
+        this.startoverlap(this.shell1group, this.shell2group, this.targetgroup, this.bargroup)
 
         this.onEnter();
 
@@ -149,6 +151,18 @@ class Base extends Phaser.Scene {
         return shell1group
     }
 
+    creatbarrier()
+    {
+        let bargroup = this.physics.add.group(
+            {
+                    defaultKey: 'tile',
+                    collideWorldBounds: true
+                    
+            });
+    
+            return bargroup
+    }
+
     creatShell2()
     {
         let shell2group = this.physics.add.group(
@@ -175,17 +189,24 @@ class Base extends Phaser.Scene {
         return targetgroup
     }
 
-    overlap (shell1, target)
+    overlap (shell, target)
     {
-        shell1.disableBody(true, true);
+        shell.disableBody(true, true);
         target.disableBody(true, true);
         this.target_num--;
     }
 
-    startoverlap(shell1group, shell2group, targetgroup)
+    overlap2(shell, bar)
+    {
+        shell.disableBody(true, true);
+    }
+
+    startoverlap(shell1group, shell2group, targetgroup,bargroup)
     {
         this.physics.add.overlap(shell1group, targetgroup, this.overlap, null, this);
         this.physics.add.overlap(shell2group, targetgroup, this.overlap, null, this); 
+        this.physics.add.overlap(shell1group, bargroup, this.overlap2, null, this);
+        this.physics.add.overlap(shell2group, bargroup, this.overlap2, null, this);
     }
 
     showtitle()
@@ -195,7 +216,8 @@ class Base extends Phaser.Scene {
             font: "28px Arial",
             color: "#ffffff",    
         });
-        this.title.setOrigin(0.5)
+        this.title.setOrigin(0.5);
+        this.title.setDepth(2);
     }
 
     finish(target_num)

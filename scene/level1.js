@@ -8,9 +8,10 @@ class Level1 extends Base {
     {
         this.target_num = 2;
         
-
         this.targetgroup.create(this.w * 0.8, this.h * 0.3).setScale(1.5).setGravity(0, -200);
         this.targetgroup.create(this.w * 0.5, this.h * 0.8).setScale(1.5).setGravity(0, -200);
+
+        
 
 
        
