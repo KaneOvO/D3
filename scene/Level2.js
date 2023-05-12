@@ -7,7 +7,7 @@ class Level2 extends Base {
     onEnter() 
     {
         this.target_num = 2;
-        this.showtitle();
+        
 
         
         

@@ -23,6 +23,8 @@ class Base extends Phaser.Scene {
 
         shootTime = 0;
         this.text =  this.add.text(16, 16, 'Number of shots: 0');
+        this.showtitle();
+
         this.shelltype1 = this.add.image(this.w * 0.1 , this.h * 0.87, 'shell1').setDepth(2).setScale(3);
         this.shelltype2 = this.add.image(this.w * 0.1 , this.h * 0.87, 'shell2').setDepth(2).setScale(0.15).setVisible(false);;
 
@@ -188,7 +190,7 @@ class Base extends Phaser.Scene {
 
     showtitle()
     {
-        this.title = this.add.text(this.w / 2, 30, 'Level' + level,
+        this.title = this.add.text(this.w / 2, 30, 'Level ' + level,
         {
             font: "28px Arial",
             color: "#ffffff",    
