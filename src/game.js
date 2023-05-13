@@ -14,15 +14,14 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
             gravity: {
                 x: 0,
                 y: 200
             }
         }
     },
-    //scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
-    scene: [Level2] 
+    scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
 };
 
 let game = new Phaser.Game(config);
