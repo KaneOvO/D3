@@ -39,6 +39,16 @@ class Level3 extends Base {
         let movetarget3 = this.targetgroup.create(this.w * 0.45, this.h * 0.2).setScale(1.5).setGravity(0, -200);
         this.move(movetarget3, this.w * 0.1);
 
+        let intro = this.add.text(this.w * 0.5, this.h * 0.1, `There will be some targets in the game that are movable, 
+
+try to hit it by firing the shells at the right time.
+        `,
+        {
+            font: "24px Arial",
+            color: "#ffffff",    
+        });
+        intro.setOrigin(0.5);
+
 
         
     }
