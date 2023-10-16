@@ -2,6 +2,8 @@ let shootTime = 0;
 let shellType = 1;
 let level = 1;
 const tileSize = 57.5;
+let shellScale = 0.7;
+let gameHeight = 0;
 
 let config = {
     type: Phaser.WEBGL,
@@ -14,14 +16,14 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             gravity: {
                 x: 0,
-                y: 200
+                y: 200,
             }
         }
     },
-    scene: [Level1,Level1settlement,Level2,Level2settlement,Level3,Level3settlement]
+    scene: [Level1,Level1settlement,]
 };
 
 let game = new Phaser.Game(config);
