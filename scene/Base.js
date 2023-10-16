@@ -68,19 +68,19 @@ class Base extends Phaser.Scene {
         sock = this.physics.add.sprite(startPoint.x, startPoint.y, 'shell');
         sock.setCollideWorldBounds(true);
 
-        // this.time.addEvent({
-        //     delay: 10,
-        //     callback: () => {
-        //         if (sock.y >= gameHeight - 50) {
-        //             sock.x = startPoint.x;
-        //             sock.y = startPoint.y;
-        //             sock.body.allowGravity = false;
-        //             sock.setVelocity(0, 0);
-        //         }
-        //     },
-        //     callbackScope: this,
-        //     loop: true,
-        // });
+        this.time.addEvent({
+            delay: 10,
+            callback: () => {
+                if (sock.y >= gameHeight - 50) {
+                    sock.x = startPoint.x;
+                    sock.y = startPoint.y;
+                    sock.body.allowGravity = false;
+                    sock.setVelocity(0, 0);
+                }
+            },
+            callbackScope: this,
+            loop: true,
+        });
 
         sock.setInteractive();
         this.input.setDraggable(sock);
