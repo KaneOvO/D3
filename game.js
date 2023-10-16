@@ -4,6 +4,8 @@ let level = 1;
 const tileSize = 57.5;
 let shellScale = 0.7;
 let gameHeight = 0;
+let sock;
+let startPoint;
 
 let config = {
     type: Phaser.WEBGL,
@@ -19,7 +21,7 @@ let config = {
             debug: true,
             gravity: {
                 x: 0,
-                y: 200,
+                y: 1000,
             }
         }
     },

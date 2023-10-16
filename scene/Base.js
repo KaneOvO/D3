@@ -7,10 +7,10 @@ class Base extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('shell1', 'assets/snowball.png')
-        this.load.image('shell2', 'assets/RainbowBall.png')
+        this.load.image('shell', 'assets/snowball.png')
         this.load.image('target', 'assets/target.png')
         this.load.image('tile', 'assets/tile.png')
+        this.load.image('wind', 'assets/wind.png')
     }
 
     create() {
@@ -30,28 +30,18 @@ class Base extends Phaser.Scene {
         this.text = this.add.text(16, 16, 'Number of shots: 0');
         this.showtitle();
 
-        this.shelltype1 = this.add.image(this.w * 0.1, this.h * 0.87, 'shell1').setDepth(2).setScale(3);
-        this.shelltype2 = this.add.image(this.w * 0.1, this.h * 0.87, 'shell2').setDepth(2).setScale(0.15).setVisible(false);;
-
-
-        this.tureentBody = this.add.rectangle(this.w * 0.1, this.h * 0.87, 150, 250, 0xffffff);
-        this.tureentHead1 = this.add.circle(0, 0, 75, 0xffffff);
-        this.tureentHead2 = this.add.rectangle(105, 0, 50, 25, 0xffffff);
-
-        this.turrent = this.add.container(this.w * 0.1, this.h * 0.68);
-        this.turrent.add(this.tureentHead1);
-        this.turrent.add(this.tureentHead2);
+        this.shelltype = this.add.image(this.w * 0.1, this.h * 0.87, 'shell').setDepth(2).setScale(3);
 
         this.targetgroup = this.creatTarget();
-        this.shell1group = this.creatShell1();
-        this.shell2group = this.creatShell2();
+        this.shellgroup = this.creatshell();
         this.bargroup = this.creatbarrier();
 
         this.windgroup = this.createWind();
 
         this.wind1 = this.windgroup.create(this.w * 0.5, this.h);
-        this.wind1.setSize(100, 20);
-        
+        this.wind1.setScale(0.5, 0.4);
+        this.wind1.setSize(100, 250);
+
         this.time.addEvent({
             delay: 10,
             callback: () => {
@@ -71,60 +61,62 @@ class Base extends Phaser.Scene {
         this.target_num;
 
         let angle = 0;
+        let isDragging = false;
+        startPoint = { x: this.w * 0.1, y: this.h * 0.8 };
+        const maxDragDistance = 100;
 
-        this.input.on('pointermove', (pointer) => {
-            angle = Phaser.Math.Angle.BetweenPoints(this.turrent, pointer);
-            if (angle > Phaser.Math.DegToRad(45) && angle < Phaser.Math.DegToRad(135)) {
-                if (angle < Phaser.Math.DegToRad(90)) {
-                    angle = Phaser.Math.DegToRad(45);
-                }
-                else {
-                    angle = Phaser.Math.DegToRad(135);
-                }
+        sock = this.physics.add.sprite(startPoint.x, startPoint.y, 'shell');
+        sock.setCollideWorldBounds(true);
 
-            }
-            this.turrent.setRotation(angle);
+        // this.time.addEvent({
+        //     delay: 10,
+        //     callback: () => {
+        //         if (sock.y >= gameHeight - 50) {
+        //             sock.x = startPoint.x;
+        //             sock.y = startPoint.y;
+        //             sock.body.allowGravity = false;
+        //             sock.setVelocity(0, 0);
+        //         }
+        //     },
+        //     callbackScope: this,
+        //     loop: true,
+        // });
+
+        sock.setInteractive();
+        this.input.setDraggable(sock);
+        sock.body.allowGravity = false;
+
+        sock.on('dragstart', function (pointer) {
+            isDragging = true;
         });
 
-        this.input.on('pointerup', () => {
-            if (shellType == 1) {
-                //let shell1 = this.creatShell(shellType);
-                let shell1 = this.shell1group.create(0, 0).setScale(shellScale);
-                shell1.enableBody(true, this.turrent.x, this.turrent.y, true, true);
-                shell1.setGravity(0, 0);
-                this.physics.velocityFromRotation(angle, 700, shell1.body.velocity);
-                shootTime++;
-                this.text.setText('Number of shots: ' + shootTime);
-            }
-            else if (shellType == 2) {
-                //let shell2 = this.creatShell(shellType);
-                let shell2 = this.shell2group.create(0, 0).setScale(0.03);
-                shell2.enableBody(true, this.turrent.x, this.turrent.y, true, true);
-                shell2.setGravity(0, 500);
-                this.physics.velocityFromRotation(angle, 1000, shell2.body.velocity);
+        sock.on('drag', function (pointer) {
+            let dragDistance = Phaser.Math.Distance.Between(startPoint.x, startPoint.y, pointer.x, pointer.y);
 
-                shootTime++;
-                this.text.setText('Number of shots: ' + shootTime);
+            if (dragDistance > maxDragDistance) {
+                dragDistance = maxDragDistance;
             }
 
+            let angle = Phaser.Math.Angle.Between(pointer.x, pointer.y, startPoint.x, startPoint.y);
+
+            sock.x = startPoint.x - Math.cos(angle) * dragDistance;
+            sock.y = startPoint.y - Math.sin(angle) * dragDistance;
         });
 
-        this.input.keyboard.on('keydown', (event) => {
-            if (event.key === '1') {
-                shellType = 1;
-                this.shelltype1.setVisible(true);
-                this.shelltype2.setVisible(false);
+        sock.on('dragend', function (pointer) {
+            if (isDragging) {
+                sock.body.allowGravity = true;
+                let force = -15;
+                const velocityX = (sock.x - startPoint.x) * force;
+                const velocityY = (sock.y - startPoint.y) * force;
+                sock.setVelocity(velocityX, velocityY);
 
+                isDragging = false;
             }
-            else if (event.key === '2') {
-                shellType = 2;
-                this.shelltype1.setVisible(false);
-                this.shelltype2.setVisible(true);
-            }
-
         });
 
-        this.startoverlap(this.shell1group, this.shell2group, this.targetgroup, this.bargroup, this.windgroup);
+
+        this.startoverlap(this.shellgroup, this.targetgroup, this.bargroup, this.windgroup);
 
         this.onEnter();
 
@@ -153,15 +145,15 @@ class Base extends Phaser.Scene {
         });
     }
 
-    creatShell1() {
-        let shell1group = this.physics.add.group(
+    creatshell() {
+        let shellgroup = this.physics.add.group(
             {
-                defaultKey: 'shell1',
+                defaultKey: 'shell',
                 collideWorldBounds: false
 
             });
 
-        return shell1group
+        return shellgroup
     }
 
     creatbarrier() {
@@ -175,23 +167,13 @@ class Base extends Phaser.Scene {
         return bargroup
     }
 
-    creatShell2() {
-        let shell2group = this.physics.add.group(
-            {
-                defaultKey: 'shell2',
-                collideWorldBounds: false
-
-            });
-
-        return shell2group
-    }
 
     creatTarget() {
         let targetgroup = this.physics.add.group(
             {
                 defaultKey: 'target',
-                collideWorldBounds: true
-
+                collideWorldBounds: true,
+                allowGravity: false,
             });
 
 
@@ -204,7 +186,7 @@ class Base extends Phaser.Scene {
             defaultKey: 'wind',
             collideWorldBounds: false,
             velocityY: -200,
-            gravityY: -200
+            gravityY: -1000,
         });
 
         this.time.addEvent({ delay: 100, callback: () => { this.wind.velocityY -= 15; }, callbackScope: this, loop: true, });
@@ -212,7 +194,7 @@ class Base extends Phaser.Scene {
         return this.wind;
     }
 
-    sockOverlapWind(shell, wind) {
+    sockOverlapWind(shell) {
         //add a force to sock
         shell.setVelocityY(-500);
     }
@@ -229,12 +211,10 @@ class Base extends Phaser.Scene {
         shell.disableBody(true, true);
     }
 
-    startoverlap(shell1group, shell2group, targetgroup, bargroup, windgroup) {
-        this.physics.add.overlap(shell1group, targetgroup, this.overlap, null, this);
-        this.physics.add.overlap(shell2group, targetgroup, this.overlap, null, this);
-        this.physics.add.overlap(shell1group, bargroup, this.overlap2, null, this);
-        this.physics.add.overlap(shell2group, bargroup, this.overlap2, null, this);
-        this.physics.add.overlap(shell1group, windgroup, this.sockOverlapWind, null, this);
+    startoverlap(shellgroup, targetgroup, bargroup, windgroup) {
+        this.physics.add.overlap(shellgroup, targetgroup, this.overlap, null, this);
+        this.physics.add.overlap(shellgroup, bargroup, this.overlap2, null, this);
+        this.physics.add.overlap(shellgroup, windgroup, this.sockOverlapWind, null, this);
     }
 
     showtitle() {
@@ -248,9 +228,6 @@ class Base extends Phaser.Scene {
     }
 
     finish(target_num) {
-        // if (target_num < 1) {
-        //     this.gotoScene('Level' + level + 'settlement')
-        // }
     }
 
     move(sprite1, movex) {
@@ -266,8 +243,7 @@ class Base extends Phaser.Scene {
 
 
 
-    update() {
+    update() { }
 
-    }
 
 }
