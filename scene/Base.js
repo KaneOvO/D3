@@ -214,7 +214,7 @@ class Base extends Phaser.Scene {
 
     sockOverlapWind(shell, wind) {
         //add a force to sock
-        shell.setVelocityY(-100);
+        shell.setVelocityY(-500);
     }
 
     overlap(shell, target) {
