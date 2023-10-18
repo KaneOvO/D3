@@ -7,7 +7,8 @@ class Base extends Phaser.Scene {
     this.load.image("shell", "assets/snowball.png");
     this.load.image("target", "assets/target.png");
     this.load.image("tile", "assets/tile.png");
-    this.load.image("wind", "assets/wind.png");
+    this.load.image('wind', 'assets/wind.png');
+    this.load.image('sock', 'assets/Sock.png');
   }
 
   create() {
@@ -64,8 +65,9 @@ class Base extends Phaser.Scene {
     startPoint = { x: this.w * 0.1, y: this.h * 0.8 };
     const maxDragDistance = 100;
 
-    sock = this.physics.add.sprite(startPoint.x, startPoint.y, "shell");
+    sock = this.physics.add.sprite(startPoint.x, startPoint.y, "sock");
     sock.setCollideWorldBounds(true);
+    sock.scale = 0.3;
 
     this.time.addEvent({
       delay: 10,
