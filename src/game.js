@@ -6,6 +6,8 @@ let shellScale = 0.7;
 let gameHeight = 0;
 let sock;
 let startPoint;
+let hitCount = 0;
+let hitText;
 
 let config = {
     type: Phaser.WEBGL,
