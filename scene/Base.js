@@ -4,11 +4,14 @@ class Base extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("shell", "assets/snowball.png");
-    this.load.image("target", "assets/target.png");
     this.load.image("tile", "assets/tile.png");
     this.load.image('wind', 'assets/wind.png');
     this.load.image('sock', 'assets/Sock.png');
+    this.load.image('sock2', 'assets/Sock2.png');
+    this.load.spritesheet('myGif', 'assets/idle.png', {
+        frameWidth: 384,
+        frameHeight: 480,
+    });
   }
 
   create() {
@@ -22,16 +25,8 @@ class Base extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#000");
     this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
-    shootTime = 0;
-    shellType = 1;
-
     hitText = this.add.text(16, 16, `Current Hit Time: ${hitCount}`);
     this.showtitle();
-
-    // this.shelltype = this.add
-    //   .image(this.w * 0.1, this.h * 0.87, "shell")
-    //   .setDepth(2)
-    //   .setScale(3);
 
     this.targetgroup = this.creatTarget();
     this.shellgroup = this.creatshell();
@@ -82,6 +77,18 @@ class Base extends Phaser.Scene {
       callbackScope: this,
       loop: true,
     });
+
+    //Create Gif Sprite
+    this.anims.create({
+        key: 'playGif',
+        frames: this.anims.generateFrameNumbers('myGif', { start: 0, end: 15 - 1 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    let gifSprite = this.add.sprite(this.w * 0.1, this.h * 0.9, 'myGif');
+    gifSprite.setScale(-0.4,0.4);
+    gifSprite.play('playGif');
 
     sock.setInteractive();
     this.input.setDraggable(sock);
@@ -177,9 +184,10 @@ class Base extends Phaser.Scene {
 
   creatTarget() {
     let targetgroup = this.physics.add.group({
-      defaultKey: "target",
+      defaultKey: "sock2",
       collideWorldBounds: true,
       allowGravity: false,
+      setOrigin:0.5,
     });
 
     return targetgroup;
