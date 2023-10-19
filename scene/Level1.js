@@ -30,7 +30,10 @@ class Level1 extends Base {
       bar.body.immovable = true;
     }
 
-    let intro = this.add.text(this.w * 0.5, this.h * 0.1, ``, {
+    let intro = this.add.text(this.w * 0.17, this.h * 0.1, `Drag the sock to fire the sock to hit the target
+hitting the white sock will increase the volume of the sock 
+hitting the black sock will decrease the volume of the sock.
+Do your best to make the socks bigger and bigger.`, {
       font: "24px Arial",
       color: "#ffffff",
     });
