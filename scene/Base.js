@@ -8,6 +8,8 @@ class Base extends Phaser.Scene {
     this.load.image('wind', 'assets/wind.png');
     this.load.image('sock', 'assets/Sock.png');
     this.load.image('sock2', 'assets/Sock2.png');
+    this.load.image('blackSock', 'assets/BlackSock.png');
+    this.load.image('bg', 'assets/BG.jpg');
     this.load.spritesheet('myGif', 'assets/idle.png', {
         frameWidth: 384,
         frameHeight: 480,
@@ -29,14 +31,13 @@ class Base extends Phaser.Scene {
     this.showtitle();
 
     this.targetgroup = this.creatTarget();
+    this.targetgroup2 = this.creatTarget2();
     this.shellgroup = this.creatshell();
     this.bargroup = this.creatbarrier();
 
     this.windgroup = this.createWind();
 
-    this.wind1 = this.windgroup.create(this.w * 0.5, this.h);
-    this.wind1.setScale(0.5, 0.4);
-    this.wind1.setSize(100, 250);
+    
 
     this.time.addEvent({
       delay: 10,
@@ -63,6 +64,7 @@ class Base extends Phaser.Scene {
     sock = this.physics.add.sprite(startPoint.x, startPoint.y, "sock");
     sock.setCollideWorldBounds(true);
     sock.scale = 0.3;
+    sock.setDepth(2);
 
     this.time.addEvent({
       delay: 10,
@@ -72,6 +74,7 @@ class Base extends Phaser.Scene {
           sock.y = startPoint.y;
           sock.body.allowGravity = false;
           sock.setVelocity(0, 0);
+          sock.setInteractive();
         }
       },
       callbackScope: this,
@@ -128,6 +131,7 @@ class Base extends Phaser.Scene {
         const velocityX = (sock.x - startPoint.x) * force;
         const velocityY = (sock.y - startPoint.y) * force;
         sock.setVelocity(velocityX, velocityY);
+        sock.disableInteractive();
 
         isDragging = false;
       }
@@ -137,7 +141,8 @@ class Base extends Phaser.Scene {
       this.shellgroup,
       this.targetgroup,
       this.bargroup,
-      this.windgroup
+      this.windgroup,
+      this.targetgroup2
     );
 
     this.onEnter();
@@ -193,6 +198,17 @@ class Base extends Phaser.Scene {
     return targetgroup;
   }
 
+  creatTarget2() {
+    let targetgroup = this.physics.add.group({
+      defaultKey: "blackSock",
+      collideWorldBounds: true,
+      allowGravity: false,
+      setOrigin:0.5,
+    });
+
+    return targetgroup;
+  }
+
   createWind() {
     this.wind = this.physics.add.group({
       defaultKey: "wind",
@@ -215,7 +231,7 @@ class Base extends Phaser.Scene {
 
   sockOverlapWind(shell) {
     //add a force to sock
-    shell.setVelocityY(-500);
+    shell.setVelocityY(-700);
   }
 
   overlap(shell, target) {
@@ -226,12 +242,22 @@ class Base extends Phaser.Scene {
     hitText.setText(`Current Hit Time: ${hitCount}`)
   }
 
-  overlap2(shell, bar) {
-    shell.disableBody(true, true);
+  overlap3(shell, target) {
+    target.disableBody(true, true);
+    shell.setScale(shell.scale * 0.7)
+    this.target_num--;
+    hitCount++;
+    hitText.setText(`Current Hit Time: ${hitCount}`)
   }
 
-  startoverlap(shellgroup, targetgroup, bargroup, windgroup) {
+  overlap2(shell, bar) {
+    shell.setVelocityX(0);
+  }
+
+  startoverlap(shellgroup, targetgroup, bargroup, windgroup,targetgroup2) {
     this.physics.add.overlap(sock, targetgroup, this.overlap, null, this);
+    this.physics.add.overlap(sock, targetgroup2, this.overlap3, null, this);
+    this.physics.add.overlap(sock, bargroup, this.overlap2, null, this);
     this.physics.add.overlap(sock, bargroup, this.overlap2, null, this);
     this.physics.add.overlap(
       sock,
