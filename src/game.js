@@ -8,6 +8,8 @@ let sock;
 let startPoint;
 let hitCount = 0;
 let hitText;
+let hitSE;
+let hitLossSE;
 
 let config = {
     type: Phaser.WEBGL,

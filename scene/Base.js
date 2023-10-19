@@ -40,21 +40,21 @@ class Base extends Phaser.Scene {
 
     this.windgroup = this.createWind();
 
-    this.throwSE = this.sound.add("throw", {
+    let throwSE = this.sound.add("throw", {
       loop: false,
       volume: 1,
       //fadeIn: 1000,
       //fadeOut: 1000,
     });
 
-    this.hitSE = this.sound.add("hit", {
+    hitSE = this.sound.add("hit", {
       loop: false,
       volume: 0.5,
       //fadeIn: 1000,
       //fadeOut: 1000,
     });
 
-    this.hitLossSE = this.sound.add("hitLoss", {
+    hitLossSE = this.sound.add("hitLoss", {
       loop: false,
       volume: 0.5,
       //fadeIn: 1000,
@@ -78,7 +78,6 @@ class Base extends Phaser.Scene {
 
     this.target_num;
 
-    let angle = 0;
     let isDragging = false;
     startPoint = { x: this.w * 0.1, y: this.h * 0.8 };
     const maxDragDistance = 100;
@@ -157,8 +156,7 @@ class Base extends Phaser.Scene {
         const velocityY = (sock.y - startPoint.y) * force;
         sock.setVelocity(velocityX, velocityY);
         sock.disableInteractive();
-        this.throwSE.play();
-
+        throwSE.play();
         isDragging = false;
       }
     });
@@ -262,6 +260,7 @@ class Base extends Phaser.Scene {
 
   overlap(shell, target) {
     target.disableBody(true, true);
+    hitSE.play();
     shell.setScale(shell.scale * 1.5);
     this.target_num--;
     hitCount++;
@@ -270,6 +269,7 @@ class Base extends Phaser.Scene {
 
   overlap3(shell, target) {
     target.disableBody(true, true);
+    hitLossSE.play();
     shell.setScale(shell.scale * 0.7);
     this.target_num--;
     hitCount++;
