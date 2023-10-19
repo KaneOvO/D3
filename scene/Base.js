@@ -5,14 +5,17 @@ class Base extends Phaser.Scene {
 
   preload() {
     this.load.image("tile", "assets/tile.png");
-    this.load.image('wind', 'assets/wind.png');
-    this.load.image('sock', 'assets/Sock.png');
-    this.load.image('sock2', 'assets/Sock2.png');
-    this.load.image('blackSock', 'assets/BlackSock.png');
-    this.load.image('bg', 'assets/BG.jpg');
-    this.load.spritesheet('myGif', 'assets/idle.png', {
-        frameWidth: 384,
-        frameHeight: 480,
+    this.load.image("wind", "assets/wind.png");
+    this.load.image("sock", "assets/Sock.png");
+    this.load.image("sock2", "assets/Sock2.png");
+    this.load.image("blackSock", "assets/BlackSock.png");
+    this.load.image("bg", "assets/BG.jpg");
+    this.load.audio("throw", "assets/throw.wav");
+    this.load.audio("hit", "assets/hit.wav");
+    this.load.audio("hitLoss", "assets/hitLoss.wav");
+    this.load.spritesheet("myGif", "assets/idle.png", {
+      frameWidth: 384,
+      frameHeight: 480,
     });
   }
 
@@ -37,7 +40,26 @@ class Base extends Phaser.Scene {
 
     this.windgroup = this.createWind();
 
-    
+    this.throwSE = this.sound.add("throw", {
+      loop: false,
+      volume: 1,
+      //fadeIn: 1000,
+      //fadeOut: 1000,
+    });
+
+    this.hitSE = this.sound.add("hit", {
+      loop: false,
+      volume: 0.5,
+      //fadeIn: 1000,
+      //fadeOut: 1000,
+    });
+
+    this.hitLossSE = this.sound.add("hitLoss", {
+      loop: false,
+      volume: 0.5,
+      //fadeIn: 1000,
+      //fadeOut: 1000,
+    });
 
     this.time.addEvent({
       delay: 10,
@@ -83,15 +105,18 @@ class Base extends Phaser.Scene {
 
     //Create Gif Sprite
     this.anims.create({
-        key: 'playGif',
-        frames: this.anims.generateFrameNumbers('myGif', { start: 0, end: 15 - 1 }),
-        frameRate: 10,
-        repeat: -1
+      key: "playGif",
+      frames: this.anims.generateFrameNumbers("myGif", {
+        start: 0,
+        end: 15 - 1,
+      }),
+      frameRate: 10,
+      repeat: -1,
     });
 
-    let gifSprite = this.add.sprite(this.w * 0.1, this.h * 0.9, 'myGif');
-    gifSprite.setScale(-0.4,0.4);
-    gifSprite.play('playGif');
+    let gifSprite = this.add.sprite(this.w * 0.1, this.h * 0.9, "myGif");
+    gifSprite.setScale(-0.4, 0.4);
+    gifSprite.play("playGif");
 
     sock.setInteractive();
     this.input.setDraggable(sock);
@@ -132,6 +157,7 @@ class Base extends Phaser.Scene {
         const velocityY = (sock.y - startPoint.y) * force;
         sock.setVelocity(velocityX, velocityY);
         sock.disableInteractive();
+        this.throwSE.play();
 
         isDragging = false;
       }
@@ -192,7 +218,7 @@ class Base extends Phaser.Scene {
       defaultKey: "sock2",
       collideWorldBounds: true,
       allowGravity: false,
-      setOrigin:0.5,
+      setOrigin: 0.5,
     });
 
     return targetgroup;
@@ -203,7 +229,7 @@ class Base extends Phaser.Scene {
       defaultKey: "blackSock",
       collideWorldBounds: true,
       allowGravity: false,
-      setOrigin:0.5,
+      setOrigin: 0.5,
     });
 
     return targetgroup;
@@ -236,36 +262,30 @@ class Base extends Phaser.Scene {
 
   overlap(shell, target) {
     target.disableBody(true, true);
-    shell.setScale(shell.scale * 1.5)
+    shell.setScale(shell.scale * 1.5);
     this.target_num--;
     hitCount++;
-    hitText.setText(`Current Hit Time: ${hitCount}`)
+    hitText.setText(`Current Hit Time: ${hitCount}`);
   }
 
   overlap3(shell, target) {
     target.disableBody(true, true);
-    shell.setScale(shell.scale * 0.7)
+    shell.setScale(shell.scale * 0.7);
     this.target_num--;
     hitCount++;
-    hitText.setText(`Current Hit Time: ${hitCount}`)
+    hitText.setText(`Current Hit Time: ${hitCount}`);
   }
 
   overlap2(shell, bar) {
     shell.setVelocityX(0);
   }
 
-  startoverlap(shellgroup, targetgroup, bargroup, windgroup,targetgroup2) {
+  startoverlap(shellgroup, targetgroup, bargroup, windgroup, targetgroup2) {
     this.physics.add.overlap(sock, targetgroup, this.overlap, null, this);
     this.physics.add.overlap(sock, targetgroup2, this.overlap3, null, this);
     this.physics.add.overlap(sock, bargroup, this.overlap2, null, this);
     this.physics.add.overlap(sock, bargroup, this.overlap2, null, this);
-    this.physics.add.overlap(
-      sock,
-      windgroup,
-      this.sockOverlapWind,
-      null,
-      this
-    );
+    this.physics.add.overlap(sock, windgroup, this.sockOverlapWind, null, this);
     this.physics.add.overlap(sock, windgroup, this.sockOverlapWind, null, this);
   }
 

@@ -13,10 +13,10 @@ class Level1 extends Base {
 
     this.target_num = 2;
 
-    this.targetgroup.create(this.w * 0.8, this.h * 0.45).setGravity(0, -1000);
+    this.targetgroup.create(this.w * 0.8, this.h * 0.35).setGravity(0, -1000);
     this.targetgroup.create(this.w * 0.5, this.h * 0.8).setGravity(0, -1000);
 
-    //this.targetgroup2.create(this.w * 0.4, this.h * 0.5).setGravity(0, -1000);
+    this.targetgroup2.create(this.w * 0.5, this.h * 0.3).setGravity(0, -1000);
 
     this.wind1 = this.windgroup.create(this.w * 0.7, this.h);
     this.wind1.setScale(0.5, 0.4);
